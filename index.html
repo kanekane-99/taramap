@@ -23,9 +23,9 @@ header h1 span{letter-spacing:-.03em}
 #filters button[aria-pressed=true]{background:var(--g);border-color:var(--g);color:#fff}
 #filters button:focus-visible,#q:focus-visible{outline:2px solid var(--g);outline-offset:2px}
 main{flex:1;display:flex;min-height:300px;position:relative;overflow:hidden;overflow:clip}
-#map{flex:1;background:#e6e6e6}
-aside{width:var(--w);flex:none;position:relative;transition:margin-right .2s;background:#fff;border-left:1px solid var(--g-soft);display:flex;flex-direction:column;z-index:1100}
-aside.closed{margin-right:calc(-1*var(--w))}
+#map{position:absolute;inset:0;background:#e6e6e6}
+aside{width:var(--w);position:absolute;top:0;bottom:0;right:0;transition:transform .2s;background:#fff;border-left:1px solid var(--g-soft);display:flex;flex-direction:column;z-index:1100}
+aside.closed{transform:translateX(100%)}
 .side-head{padding:16px 20px 12px}
 .side-head h3{margin:0;font-size:16px;font-weight:500}
 .side-head p{margin:2px 0 0;font-size:13px}
@@ -76,7 +76,6 @@ footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:
  header h1{font-size:17px}
  #filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
  #filters::-webkit-scrollbar{display:none}
- aside{position:absolute;inset:0 0 0 auto}
  aside:not(.closed){box-shadow:-4px 0 18px rgba(0,0,0,.2)}
  .leaflet-popup-content{width:235px!important}
 }
@@ -117,10 +116,10 @@ const MAPTILER_KEY='';
 const online=location.protocol==='http:'||location.protocol==='https:';
 const OSMC='<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>';
 (MAPTILER_KEY
- ?L.tileLayer('https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png?key='+MAPTILER_KEY,{maxZoom:18,attribution:'<a href="https://www.maptiler.com/copyright/">&copy; MapTiler</a> '+OSMC})
+ ?L.tileLayer('https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png?key='+MAPTILER_KEY,{maxZoom:18,keepBuffer:4,attribution:'<a href="https://www.maptiler.com/copyright/">&copy; MapTiler</a> '+OSMC})
  :online
- ?L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:OSMC})
- :L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Tiles &copy; Esri'})
+ ?L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,keepBuffer:4,attribution:OSMC})
+ :L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,keepBuffer:4,attribution:'Tiles &copy; Esri'})
 ).addTo(map);
 const layer=L.layerGroup().addTo(map);
 const key=p=>p[0].toFixed(5)+','+p[1].toFixed(5);
@@ -174,6 +173,7 @@ function render(){
  lines.forEach(l=>layer.addLayer(l));arr.forEach(m=>layer.addLayer(m));
  groups.forEach(g=>{
   g.marker=L.marker(g.pos,{icon:icon(g.items.length),zIndexOffset:-g.items.length*100,keyboard:true,title:g.items.map(i=>i.n).slice(0,3).join(', ')});
+  g.marker.on('click',()=>padPopup(g));
   g.marker.bindPopup(()=>card(g),{maxWidth:340,autoPanPadding:[30,30]});
   g.marker.on('click',()=>highlight(g.items[g.cur]));
   g.marker.on('popupopen',e=>{
@@ -208,12 +208,15 @@ function renderList(){
  });
 }
 
+// larghezza occupata dal menù, per non nascondere pallini e pop-up sotto di esso
+const panel=()=>side.classList.contains('closed')?0:side.offsetWidth;
+const padPopup=g=>{const p=g.marker.getPopup();if(p)p.options.autoPanPaddingBottomRight=L.point(30+panel(),30)};
 function select(d){
  d.g.cur=d.g.items.indexOf(d);
  map.closePopup();
- map.fitBounds([d.a,d.b],{padding:[70,70],maxZoom:9,animate:true});
+ map.fitBounds([d.a,d.b],{paddingTopLeft:[70,70],paddingBottomRight:[70+panel(),70],maxZoom:9,animate:true});
  highlight(d);
- setTimeout(()=>d.g.marker.openPopup(),350);
+ setTimeout(()=>{padPopup(d.g);d.g.marker.openPopup()},350);
 }
 
 // pulsanti tipologia: uno solo alla volta; se nessuno è attivo vale "Tutti"
@@ -233,7 +236,6 @@ function setSide(open){
  handle.setAttribute('aria-label',open?'Chiudi elenco':'Apri elenco');
 }
 handle.onclick=()=>setSide(side.classList.contains('closed'));
-side.addEventListener('transitionend',e=>{if(e.target===side)map.invalidateSize()});
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;renderList()});
 document.querySelector('main').addEventListener('scroll',e=>{e.target.scrollLeft=0;e.target.scrollTop=0});
 if(mobile())setSide(false);

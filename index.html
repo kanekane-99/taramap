@@ -22,7 +22,7 @@ header h1 span{letter-spacing:-.03em}
 #filters button:hover{background:rgba(106,93,17,.08)}
 #filters button[aria-pressed=true]{background:var(--g);border-color:var(--g);color:#fff}
 #filters button:focus-visible,#q:focus-visible{outline:2px solid var(--g);outline-offset:2px}
-main{flex:1;display:flex;min-height:300px;position:relative;overflow:hidden}
+main{flex:1;display:flex;min-height:300px;position:relative;overflow:hidden;overflow:clip}
 #map{flex:1;background:#e6e6e6}
 aside{width:var(--w);flex:none;position:relative;transition:margin-right .2s;background:#fff;border-left:1px solid var(--g-soft);display:flex;flex-direction:column;z-index:1100}
 aside.closed{margin-right:calc(-1*var(--w))}
@@ -32,7 +32,7 @@ aside.closed{margin-right:calc(-1*var(--w))}
 .search{padding:0 16px 14px;border-bottom:1px solid var(--g-soft)}
 #q{width:100%;font:400 14px 'Instrument Sans',sans-serif;color:var(--g);background:#f6f5ee;border:1px solid var(--g-soft);border-radius:6px;padding:10px 12px}
 #q::placeholder{color:var(--g);opacity:.6}
-#list{list-style:none;margin:0;padding:0;overflow-y:auto;flex:1}
+#list{position:relative;list-style:none;margin:0;padding:0;overflow-y:auto;flex:1}
 #list button{all:unset;box-sizing:border-box;display:block;width:100%;padding:12px 20px;cursor:pointer;border-bottom:1px solid var(--g-soft);border-left:3px solid transparent}
 #list button:hover{background:rgba(106,93,17,.06)}
 #list button:focus-visible{outline:2px solid var(--g);outline-offset:-2px}
@@ -106,7 +106,22 @@ const NONE='Non indicata';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const mobile=()=>innerWidth<=760;
 const map=L.map('map').setView([45.6,11.5],mobile()?5:6);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+/* ---- SFONDO MAPPA ----------------------------------------------------------
+   Per un uso stabile e continuativo incolla qui la chiave GRATUITA di MapTiler
+   (cloud.maptiler.com, i dati sono di OpenStreetMap). Con la chiave la mappa funziona anche
+   con doppio clic dal computer; sul sito online limita la chiave al dominio del sito.
+   Senza chiave: sul sito online usa le tile standard di OpenStreetMap (uso leggero);
+   aperto come file dal computer usa uno sfondo di riserva, perché OpenStreetMap
+   blocca le richieste che non arrivano da un sito web. */
+const MAPTILER_KEY='';
+const online=location.protocol==='http:'||location.protocol==='https:';
+const OSMC='<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>';
+(MAPTILER_KEY
+ ?L.tileLayer('https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png?key='+MAPTILER_KEY,{maxZoom:18,attribution:'<a href="https://www.maptiler.com/copyright/">&copy; MapTiler</a> '+OSMC})
+ :online
+ ?L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:OSMC})
+ :L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Tiles &copy; Esri'})
+).addTo(map);
 const layer=L.layerGroup().addTo(map);
 const key=p=>p[0].toFixed(5)+','+p[1].toFixed(5);
 const state={types:new Set(),q:''};
@@ -126,6 +141,9 @@ function card(g){
  return `<div class="card"><h3>${esc(d.n)}</h3>${d.t?`<span class="tag">${esc(d.t)}</span>`:''}${body?`<div class="body">${body}</div>`:''}${d.p?`<p class="loc">${PIN}<span>${esc(d.p)}</span></p>`:''}${nav}</div>`;
 }
 
+// scorre solo l'elenco (mai la pagina), così il menù chiuso resta chiuso
+function revealRow(b){const l=document.getElementById('list'),t=b.offsetTop,h=b.offsetHeight;
+ if(t<l.scrollTop)l.scrollTop=t;else if(t+h>l.scrollTop+l.clientHeight)l.scrollTop=t+h-l.clientHeight}
 function highlight(d){
  lines.forEach(l=>l.setStyle({weight:1.2,opacity:.35}));
  groups.forEach(g=>{const e=g.marker.getElement();if(e)e.classList.remove('on')});
@@ -136,7 +154,7 @@ function highlight(d){
  d.g.items.forEach(i=>{const b=document.querySelector(`#list button[data-id="${i.id}"]`);if(b)b.setAttribute('data-sel','')});
  const cur=document.querySelector(`#list button[data-id="${d.id}"]`);
  if(cur)cur.setAttribute('aria-current','true');
- const first=document.querySelector('#list [data-sel]');if(first)first.scrollIntoView({block:'nearest'});
+ const first=document.querySelector('#list [data-sel]');if(first)revealRow(first);
 }
 
 // ricostruisce mappa ed elenco in base ai filtri attivi
@@ -193,7 +211,6 @@ function renderList(){
 function select(d){
  d.g.cur=d.g.items.indexOf(d);
  map.closePopup();
- if(mobile())setSide(false);
  map.fitBounds([d.a,d.b],{padding:[70,70],maxZoom:9,animate:true});
  highlight(d);
  setTimeout(()=>d.g.marker.openPopup(),350);
@@ -218,7 +235,7 @@ function setSide(open){
 handle.onclick=()=>setSide(side.classList.contains('closed'));
 side.addEventListener('transitionend',e=>{if(e.target===side)map.invalidateSize()});
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;renderList()});
-map.on('click',()=>{if(mobile())setSide(false)});
+document.querySelector('main').addEventListener('scroll',e=>{e.target.scrollLeft=0;e.target.scrollTop=0});
 if(mobile())setSide(false);
 drawFilters();render();
 </script>

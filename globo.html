@@ -10,7 +10,7 @@
 <style>@font-face{font-family:'Instrument Sans';font-style:normal;font-weight:400 700;font-display:swap;unicode-range:U+0052;src:url(data:font/woff2;base64,d09GMgABAAAAAAVwABQAAAAACsQAAAUGAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbIBwqP0hWQVJnBmA/U1RBVIEkJygANC9oEQgKgViBSjCEHgE2AiQDDAsIAAQgBYYsByAMBxtXCSgehekWywe0kwTtxLa34HnKqb0/I7Msy4nqAHkbACww2wVgp+kynfdwRYISD8+b5/vJVcpUsokOsaoDHiSlS9ePxly9m3TH/DAN0WP8zX83jYg2taYSCpTEIsk8FJe2SiN64pkupGqEq9rUYXoNAQSwAQBBUAiCAGEKFZPRYyfPJogFYAwAECBMhSqqVTDOxhU7N5Pb1tF+ZfDA8hq2y6tto9Av8IJMDrfhBYdy92gEDQjKDLYTpsJJmOknihG0QrBUt9zJAnWzmg9MEsHIUipSD1cUzP+THCK8YKaZ/ZbxQ38lSwEBkGvqAyBJIwhBNOAJAnXUntTOtWLDnmftTokiL9ucWwahcBWq0ma06RZbSwAki0mgmGzmvZdX4pECGkGJI3dCPQMEAYnJGYVcNR843rKoRqEkAX8IAoDCeoEX/Hh+OMLRB9oOCnZUrRGhtUiihVIzc4xTZK4AtLoUqofLPoF+TAKpUjVin0b9ndhJKxIVpxVTWx0DBc8oXeamOI6O3T+nMWIAaAD8gA8YAeYCAAsAhUIsK2GVRHxRa2XUZ4s9b/n0U45+8kk4LJFbPpfMZ3anFV0dSddnnF3w+acQHtVwjbkfXPigcbOHz0aeODxlQ3PX/CFDuhZuaJny3vi3p88cM6RvxqgZj944+3Bq680pvIpJGxp75vVNXLpkuffwNFkwa/I7M58ZMXHU6I9Hvz1lzuihQ2eNmNbpHQFAAIUGCmkAqkCJ4/wY7gXwguGOalwuIQJEUD5LlFKKE6NmudlofpnpGXUujPWN907ZiYxq+AjLdRy3OKPUNcbAadgBHZsjJ06Mn81msRljenI5Rtlss/zyy1izxcwzY9E5F016l+Fmgfz9ZtnfdNRZc3DmmHXtKq361blM06/Ca2YkHh8o+OILN56XzPLlxd1EInbuO/+5mNbljYoFhdg9u7pXz50++e8EXoSc+pU1FtwQikTClM+2Q57nCwX9IV+1W0FxmUOCu4gWI02gIq5S1wRW////wI5wKQ5RDccZxuVmgtBot1lpFlvRt3CP6oWwCJQTe0hF5ljoGiuUraPPXg5nJBrqD1Kl36ep+0Dym2+KryujxvKy/GTF+Q36/z7hB6Lnq/5zUXVvnMyANlcum37pj/7+1+8MXoQ69bN8A0nXte2gP5lTbtjfzSmcOjUSoqZAxHU3u2foyiVz9fw5z8v2MtH2XE1gR1zVQestBwggcJ8zbuyyWN/ZoNZ/AHy/rxwG/PYNXc5cqL3qA8CPAkDgyQqoR9pA7hII5NL1gbozhRuHEUBTMsY4fFyW72jECgGvQCGh2CukcPiJNCOdIIuGtJCPnixP8VOXh3OITVheoyi2fEAODj9RDFu+IRc3f1CcoFygLLIKyia/ssjDVnU4SN31ugnCajSjbLHVPtuts8ZaOyW1aNKiRdJsa6UlTbDZDjttt8smaZtbV8+yolagnB5rt1ivXCVHoBCta22xvRVXjX/YTlvt0KNRozXWxR+/y0oNVtlik8bZRF1x62rr7VjDYqrX2DxT2hrebKMVtmvWoClv7jXVNHfZMXrHcThz1OOkTmSsPtVzpU9CriO52Rm1CsG4+r+3xRYb7bBIkwbdGrTosmRlifOsk+pca570fcopSnXKulHkLMRNPHJOX0rgKNzMaTT1crQfp56n3mrGTVbYaIJZ9F5nlZm21H3SZhoAzGQqZD2fEHP8WrcBAAAA) format('woff2')}</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <style>
-:root{--w:340px;--g:#6a5d11;--g-soft:rgba(106,93,17,.16)}
+:root{--w:340px;--g:#004DFF;--g-soft:rgba(0,77,255,.16)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{font-family:'Instrument Sans',sans-serif;font-weight:400;color:var(--g);background:#fff;display:flex;flex-direction:column}
@@ -18,12 +18,12 @@ header{flex:none;background:#fff;border-bottom:1px solid var(--g-soft);padding:1
 header h1{margin:0;font-size:24px;font-weight:500;line-height:1.2}
 header h1 span{letter-spacing:-.03em}
 #filters{display:flex;flex-wrap:wrap;gap:8px}
-#filters button{all:unset;box-sizing:border-box;cursor:pointer;flex:none;font-size:13px;font-weight:500;padding:6px 14px;border:1px solid rgba(106,93,17,.4);border-radius:999px;background:#fff;color:var(--g);white-space:nowrap}
-#filters button:hover{background:rgba(106,93,17,.08)}
+#filters button{all:unset;box-sizing:border-box;cursor:pointer;flex:none;font-size:13px;font-weight:500;padding:6px 14px;border:1px solid rgba(0,77,255,.4);border-radius:999px;background:#fff;color:var(--g);white-space:nowrap}
+#filters button:hover{background:rgba(0,77,255,.08)}
 #filters button[aria-pressed=true]{background:var(--g);border-color:var(--g);color:#fff}
 #filters button:focus-visible,#q:focus-visible{outline:2px solid var(--g);outline-offset:2px}
 main{flex:1;display:flex;min-height:300px;position:relative;overflow:hidden;overflow:clip}
-#map{position:absolute;inset:0;background:#dfe5e2}
+#map{position:absolute;inset:0;background:#fff}
 aside{width:var(--w);position:absolute;top:0;bottom:0;right:0;transition:transform .2s;background:#fff;border-left:1px solid var(--g-soft);display:flex;flex-direction:column;z-index:1100}
 aside.closed{transform:translateX(100%)}
 .side-head{padding:16px 20px 12px}
@@ -34,9 +34,9 @@ aside.closed{transform:translateX(100%)}
 #q::placeholder{color:var(--g);opacity:.6}
 #list{position:relative;list-style:none;margin:0;padding:0;overflow-y:auto;flex:1}
 #list button{all:unset;box-sizing:border-box;display:block;width:100%;padding:12px 20px;cursor:pointer;border-bottom:1px solid var(--g-soft);border-left:3px solid transparent}
-#list button:hover{background:rgba(106,93,17,.06)}
+#list button:hover{background:rgba(0,77,255,.06)}
 #list button:focus-visible{outline:2px solid var(--g);outline-offset:-2px}
-#list button[data-sel]{background:#a69e70}
+#list button[data-sel]{background:#6694FF}
 #list button[aria-current=true]{border-left-color:var(--g)}
 #list b{display:block;font-weight:500;font-size:14px;line-height:1.3}
 #list small{display:block;font-size:12px;opacity:.8;margin-top:2px}
@@ -49,14 +49,16 @@ aside.closed #handle svg{transform:rotate(180deg)}
 footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:12px;background:#fff}
 .maplibregl-map{font-family:'Instrument Sans',sans-serif;color:var(--g)}
 .maplibregl-ctrl-attrib,.maplibregl-ctrl-attrib a{color:var(--g)!important}
-.dot{box-sizing:border-box;border-radius:50%;background:#6a5d11;box-shadow:0 0 0 .5px #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;line-height:1;cursor:pointer;transition:background .15s}
-.dot.on{background:#a69e70}
-.ring{box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #6a5d11;cursor:pointer}
+.dot{box-sizing:border-box;border-radius:50%;background:#004DFF;box-shadow:0 0 0 .5px #fff,0 0 6px 1px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;line-height:1;cursor:pointer;transition:background .15s}
+.dot.on{background:#6694FF}
+.ring{box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #004DFF;cursor:pointer}
 #map.far .ring{display:none}
+.maplibregl-popup{z-index:5000}
+.measure{position:absolute;left:-9999px;top:0;visibility:hidden;width:246px;font:400 13px/1.4 'Instrument Sans',sans-serif}
 .maplibregl-popup-content{width:290px;padding:20px 22px;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.25);color:var(--g);font:400 13px/1.4 'Instrument Sans',sans-serif}
 .maplibregl-popup-close-button{color:var(--g);font-size:20px;line-height:1;padding:6px 10px}
 .card h3{margin:0 18px 10px 0;font-size:18px;font-weight:500;line-height:1.2}
-.card .tag{display:inline-block;margin:0 0 12px;padding:3px 11px;border-radius:999px;background:rgba(106,93,17,.12);font-size:12px;font-weight:500;line-height:1.3}
+.card .tag{display:inline-block;margin:0 0 12px;padding:3px 11px;border-radius:999px;background:rgba(0,77,255,.12);font-size:12px;font-weight:500;line-height:1.3}
 .card .body{max-height:200px;overflow-y:auto;padding-right:4px;font-size:13px;line-height:1.45}
 .card .body p{margin:0}
 .card .blk{margin:0 0 10px}
@@ -69,7 +71,7 @@ footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:
 .alist .cnt{margin:0 0 8px;font-size:12px}
 .alist ul{list-style:none;margin:0;padding:0;max-height:240px;overflow-y:auto;border-top:1px solid var(--g-soft)}
 .alist button{all:unset;box-sizing:border-box;display:block;width:100%;padding:7px 4px;cursor:pointer;border-bottom:1px solid var(--g-soft)}
-.alist button:hover{background:rgba(106,93,17,.07)}
+.alist button:hover{background:rgba(0,77,255,.07)}
 .alist button:focus-visible{outline:2px solid var(--g);outline-offset:-2px}
 .alist b{display:block;font-weight:500;font-size:12.5px;line-height:1.3}
 .alist small{display:block;font-size:11px;opacity:.8;margin-top:1px}
@@ -85,6 +87,7 @@ footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:
  #filters::-webkit-scrollbar{display:none}
  aside:not(.closed){box-shadow:-4px 0 18px rgba(0,0,0,.2)}
  .maplibregl-popup-content{width:235px}
+ .measure{width:191px}
 }
 @media(prefers-reduced-motion:reduce){aside,#handle svg,.dot{transition:none}}
 </style>
@@ -97,7 +100,7 @@ footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:
 <main>
  <div id="map" role="application" aria-label="Mappa interattiva"></div>
  <aside id="side">
-  <button id="handle" type="button" aria-controls="list" aria-expanded="true" aria-label="Chiudi elenco"><svg width="12" height="16" viewBox="0 0 12 16" fill="none" stroke="#6a5d11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 6-5 6"/></svg></button>
+  <button id="handle" type="button" aria-controls="list" aria-expanded="true" aria-label="Chiudi elenco"><svg width="12" height="16" viewBox="0 0 12 16" fill="none" stroke="#004DFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l5 6-5 6"/></svg></button>
   <div class="side-head"><h3>Soggetti coinvolti</h3><p id="count"></p></div>
   <div class="search"><input id="q" type="search" placeholder="Cerca per nome o luogo…" aria-label="Cerca per nome o luogo" autocomplete="off"></div>
   <ul id="list"></ul>
@@ -122,7 +125,7 @@ const mapEl=document.getElementById('map');
 const map=new maplibregl.Map({container:'map',center:[12,45.2],zoom:mobile()?1.9:3.1,maxPitch:0,
  style:{version:8,projection:{type:'globe'},
   sources:{base:{type:'raster',tiles:[SRC.t],tileSize:256,maxzoom:18,attribution:SRC.a}},
-  layers:[{id:'base',type:'raster',source:'base',paint:{'raster-saturation':-0.5,'raster-contrast':-0.08}}]}});
+  layers:[{id:'base',type:'raster',source:'base',minzoom:5,paint:{'raster-saturation':-0.5,'raster-contrast':-0.08}}]}});
 map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
 const key=p=>p[0].toFixed(5)+','+p[1].toFixed(5);
 const ll=p=>[p[1],p[0]];                       // [lat,lon] -> [lon,lat]
@@ -140,7 +143,7 @@ function arc(a,b,n=48){
   const x=s1*u[0]+s2*v[0],y=s1*u[1]+s2*v[1],z=s1*u[2]+s2*v[2];out.push([Math.atan2(y,x)/r,Math.atan2(z,Math.hypot(x,y))/r])}
  return out;
 }
-const PIN='<svg width="13" height="16" viewBox="0 0 24 24" fill="#6a5d11" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>';
+const PIN='<svg width="13" height="16" viewBox="0 0 24 24" fill="#004DFF" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>';
 function card(g){
  const d=g.items[g.cur];
  const ops=d.o.length>1?'<ul>'+d.o.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>':(d.o.length?`<p>${esc(d.o[0])}</p>`:'');
@@ -148,7 +151,15 @@ function card(g){
  const aiuti=ops?`<div class="blk"><span class="lab">Tipologia di aiuto</span>${ops}</div>`:'';
  const body=aiuti+zona;
  const nav=g.items.length>1?`<div class="nav"><button type="button" data-s="-1" aria-label="Soggetto precedente">‹</button><span>${g.cur+1} di ${g.items.length} da questo luogo</span><button type="button" data-s="1" aria-label="Soggetto successivo">›</button></div>`:'';
- return `<div class="card"><h3>${esc(d.n)}</h3>${d.t?`<span class="tag">${esc(d.t)}</span>`:''}${body?`<div class="body">${body}</div>`:''}${d.p?`<p class="loc">${PIN}<span>${esc(d.p)}</span></p>`:''}${nav}</div>`;
+ return `<div class="card"><div class="main"${g.H?` style="min-height:${g.H}px"`:''}><h3>${esc(d.n)}</h3>${d.t?`<span class="tag">${esc(d.t)}</span>`:''}${body?`<div class="body">${body}</div>`:''}${d.p?`<p class="loc">${PIN}<span>${esc(d.p)}</span></p>`:''}</div>${nav}</div>`;
+}
+// misura l'altezza massima delle schede di un luogo, così la finestra non cambia dimensione né posizione
+function fixHeight(g){
+ if(g.items.length<2||g.H!=null)return;
+ const box=document.createElement('div');box.className='measure';document.body.appendChild(box);
+ const keep=g.cur;let h=0;
+ g.items.forEach((_,i)=>{g.cur=i;box.innerHTML=card(g);h=Math.max(h,box.querySelector('.main').offsetHeight)});
+ g.cur=keep;box.remove();g.H=h;
 }
 
 // scorre solo l'elenco (mai la pagina), così il menù chiuso resta chiuso
@@ -170,14 +181,26 @@ function highlight(d){
  if(cur)cur.setAttribute('aria-current','true');
  const first=document.querySelector('#list [data-sel]');if(first)revealRow(first);
 }
+function revealPop(p){
+ const el=p.getElement();if(!el)return;
+ const r=el.getBoundingClientRect(),m=mapEl.getBoundingClientRect(),pad=12;
+ const lf=m.left+pad,tp=m.top+pad,rg=m.right-panel()-pad,bt=m.bottom-pad;
+ let x=0,y=0;
+ if(r.top<tp)y=r.top-tp;else if(r.bottom>bt)y=r.bottom-bt;
+ if(r.left<lf)x=r.left-lf;else if(r.right>rg)x=r.right-rg;
+ if(x||y)map.panBy([x,y],{duration:400});
+}
 function closePop(){if(curPop){const p=curPop;curPop=null;p.remove()}}
 function openPop(lngLat,html,offset,onClose,onClick){
  closePop();
- const p=new maplibregl.Popup({offset,maxWidth:'330px',focusAfterOpen:false,closeOnClick:false}).setLngLat(lngLat).setHTML(html).addTo(map);
+ const p=new maplibregl.Popup({anchor:"bottom",offset,maxWidth:'330px',focusAfterOpen:false,closeOnClick:false}).setLngLat(lngLat).setHTML(html).addTo(map);
  p.on('close',()=>{if(curPop===p)curPop=null;onClose&&onClose()});
- p.getElement().onclick=onClick;curPop=p;return p;
+ p.getElement().onclick=onClick;curPop=p;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>revealPop(p)));
+ return p;
 }
 function openGroup(g){
+ fixHeight(g);
  const off=[g.shift,-dia(g.items.length)/2-4];
  const p=openPop(ll(g.pos),card(g),off,()=>{if(active&&active.g===g)highlight(null)},ev=>{
   const b=ev.target.closest('.nav button');if(!b)return;
@@ -222,7 +245,7 @@ function render(){
   if(n>1)el.innerHTML=`<span style="font-size:${d<26?11:d<44?13:15}px">${n}</span>`;
   el.onclick=ev=>{ev.stopPropagation();openGroup(g)};
   g.el=el;g.marker=new maplibregl.Marker({element:el,offset:[g.shift,0]}).setLngLat(ll(g.pos)).addTo(map);
-  g.marker.getElement().style.zIndex=String(1000-n);
+  g.marker.getElement().style.zIndex=String(500-n);
   mk.push(g.marker);
  });
  renderList();
@@ -276,11 +299,41 @@ handle.onclick=()=>setSide(side.classList.contains('closed'));
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;renderList()});
 document.querySelector('main').addEventListener('scroll',e=>{e.target.scrollLeft=0;e.target.scrollTop=0});
 if(mobile())setSide(false);
+const BM=['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg',
+ 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default//EPSG3857_500m/{z}/{y}/{x}.jpeg',
+ 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'];
+let bmI=0,bmOk=false;
+function addBM(){
+ if(bmI>=BM.length)return;
+ const id='bm'+bmI;
+ map.addSource(id,{type:'raster',tiles:[BM[bmI]],tileSize:256,maxzoom:8,attribution:'Imagery &copy; NASA GIBS'});
+ map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':['interpolate',['linear'],['zoom'],5.5,1,8,0]}},'lines');
+}
+// se un indirizzo delle immagini non risponde, prova il successivo
+map.on('error',e=>{if(bmOk||e.sourceId!=='bm'+bmI)return;const cur=bmI;setTimeout(()=>{if(bmI!==cur||bmOk)return;const id='bm'+bmI;if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id);bmI++;addBM()},0)});
+map.on('data',e=>{if(e.dataType==='source'&&e.tile&&e.sourceId==='bm'+bmI)bmOk=true});
+// scivolamento con ease-out dopo aver trascinato con il mouse (da touch c'è già)
+(function(){
+ const el=map.getCanvasContainer();let s=[],down=false;
+ el.addEventListener('mousedown',e=>{if(e.button!==0)return;down=true;s=[{t:performance.now(),x:e.clientX,y:e.clientY}]});
+ window.addEventListener('mousemove',e=>{if(!down)return;const t=performance.now();s.push({t,x:e.clientX,y:e.clientY});while(s.length>2&&t-s[0].t>120)s.shift()});
+ window.addEventListener('mouseup',()=>{
+  if(!down)return;down=false;
+  const n=performance.now(),a=s[0],b=s[s.length-1];
+  if(s.length<2||n-b.t>70)return;
+  const dt=Math.max(16,b.t-a.t),vx=(b.x-a.x)/dt,vy=(b.y-a.y)/dt,sp=Math.hypot(vx,vy);
+  if(sp<0.15)return;
+  const T=1100,k=Math.min(sp*T/3,700)/sp;
+  setTimeout(()=>map.panBy([-vx*k,-vy*k],{duration:T,easing:t=>1-Math.pow(1-t,3)}),0);
+ });
+})();
 map.on('zoom',()=>mapEl.classList.toggle('far',map.getZoom()<9.5));
 map.on('load',()=>{
  map.addSource('lines',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
- map.addLayer({id:'lines',type:'line',source:'lines',paint:{'line-color':'#6a5d11','line-width':1.2,'line-opacity':.35,'line-dasharray':[4,3]}});
- map.addLayer({id:'lines-hi',type:'line',source:'lines',filter:['==',['get','k'],''],paint:{'line-color':'#6a5d11','line-width':2.4,'line-opacity':1,'line-dasharray':[4,3]}});
+ const LC=['interpolate',['linear'],['zoom'],5.5,'#ffffff',7.5,'#004DFF'];
+ map.addLayer({id:'lines',type:'line',source:'lines',paint:{'line-color':LC,'line-width':1.2,'line-opacity':.5,'line-dasharray':[4,3]}});
+ map.addLayer({id:'lines-hi',type:'line',source:'lines',filter:['==',['get','k'],''],paint:{'line-color':LC,'line-width':2.6,'line-opacity':1,'line-dasharray':[4,3]}});
+ addBM();
  mapEl.classList.add('far');
  drawFilters();render();
 });

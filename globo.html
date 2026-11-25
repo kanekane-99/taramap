@@ -36,8 +36,8 @@ aside.closed{transform:translateX(100%)}
 #list button{all:unset;box-sizing:border-box;display:block;width:100%;padding:12px 20px;cursor:pointer;border-bottom:1px solid var(--g-soft);border-left:3px solid transparent}
 #list button:hover{background:rgba(106,93,17,.06)}
 #list button:focus-visible{outline:2px solid var(--g);outline-offset:-2px}
-#list button[data-sel]{background:#6a5d11;color:#fff}
-#list button[aria-current=true]{border-left-color:#fff}
+#list button[data-sel]{background:#a69e70}
+#list button[aria-current=true]{border-left-color:var(--g)}
 #list b{display:block;font-weight:500;font-size:14px;line-height:1.3}
 #list small{display:block;font-size:12px;opacity:.8;margin-top:2px}
 .empty{padding:20px;font-size:13px}
@@ -49,13 +49,10 @@ aside.closed #handle svg{transform:rotate(180deg)}
 footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:12px;background:#fff}
 .maplibregl-map{font-family:'Instrument Sans',sans-serif;color:var(--g)}
 .maplibregl-ctrl-attrib,.maplibregl-ctrl-attrib a{color:var(--g)!important}
-.dot{box-sizing:border-box;border-radius:50%;background:#6a5d11;box-shadow:0 0 0 .5px #fff,0 0 6px 1px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;line-height:1;cursor:pointer;transition:background .15s}
+.dot{box-sizing:border-box;border-radius:50%;background:#6a5d11;box-shadow:0 0 0 .5px #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:500;line-height:1;cursor:pointer;transition:background .15s}
 .dot.on{background:#a69e70}
 .ring{box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid #6a5d11;cursor:pointer}
 #map.far .ring{display:none}
-.maplibregl-popup{z-index:5000}
-.maplibregl-popup-content{transform-origin:50% 100%}
-.measure{position:absolute;left:-9999px;top:0;visibility:hidden;width:246px;font:400 13px/1.4 'Instrument Sans',sans-serif}
 .maplibregl-popup-content{width:290px;padding:20px 22px;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.25);color:var(--g);font:400 13px/1.4 'Instrument Sans',sans-serif}
 .maplibregl-popup-close-button{color:var(--g);font-size:20px;line-height:1;padding:6px 10px}
 .card h3{margin:0 18px 10px 0;font-size:18px;font-weight:500;line-height:1.2}
@@ -88,7 +85,6 @@ footer{flex:none;border-top:1px solid var(--g-soft);padding:12px 24px;font-size:
  #filters::-webkit-scrollbar{display:none}
  aside:not(.closed){box-shadow:-4px 0 18px rgba(0,0,0,.2)}
  .maplibregl-popup-content{width:235px}
- .measure{width:191px}
 }
 @media(prefers-reduced-motion:reduce){aside,#handle svg,.dot{transition:none}}
 </style>
@@ -126,7 +122,7 @@ const mapEl=document.getElementById('map');
 const map=new maplibregl.Map({container:'map',center:[12,45.2],zoom:mobile()?1.9:3.1,maxPitch:0,
  style:{version:8,projection:{type:'globe'},
   sources:{base:{type:'raster',tiles:[SRC.t],tileSize:256,maxzoom:18,attribution:SRC.a}},
-  layers:[{id:'base',type:'raster',source:'base',minzoom:0,paint:{'raster-saturation':-0.5,'raster-contrast':-0.08}}]}});
+  layers:[{id:'base',type:'raster',source:'base',paint:{'raster-saturation':-0.5,'raster-contrast':-0.08}}]}});
 map.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
 const key=p=>p[0].toFixed(5)+','+p[1].toFixed(5);
 const ll=p=>[p[1],p[0]];                       // [lat,lon] -> [lon,lat]
@@ -152,15 +148,7 @@ function card(g){
  const aiuti=ops?`<div class="blk"><span class="lab">Tipologia di aiuto</span>${ops}</div>`:'';
  const body=aiuti+zona;
  const nav=g.items.length>1?`<div class="nav"><button type="button" data-s="-1" aria-label="Soggetto precedente">‹</button><span>${g.cur+1} di ${g.items.length} da questo luogo</span><button type="button" data-s="1" aria-label="Soggetto successivo">›</button></div>`:'';
- return `<div class="card"><div class="main"${g.H?` style="min-height:${g.H}px"`:''}><h3>${esc(d.n)}</h3>${d.t?`<span class="tag">${esc(d.t)}</span>`:''}${body?`<div class="body">${body}</div>`:''}${d.p?`<p class="loc">${PIN}<span>${esc(d.p)}</span></p>`:''}</div>${nav}</div>`;
-}
-// misura l'altezza massima delle schede di un luogo, così la finestra non cambia dimensione né posizione
-function fixHeight(g){
- if(g.items.length<2||g.H!=null)return;
- const box=document.createElement('div');box.className='measure';document.body.appendChild(box);
- const keep=g.cur;let h=0;
- g.items.forEach((_,i)=>{g.cur=i;box.innerHTML=card(g);h=Math.max(h,box.querySelector('.main').offsetHeight)});
- g.cur=keep;box.remove();g.H=h;
+ return `<div class="card"><h3>${esc(d.n)}</h3>${d.t?`<span class="tag">${esc(d.t)}</span>`:''}${body?`<div class="body">${body}</div>`:''}${d.p?`<p class="loc">${PIN}<span>${esc(d.p)}</span></p>`:''}${nav}</div>`;
 }
 
 // scorre solo l'elenco (mai la pagina), così il menù chiuso resta chiuso
@@ -171,77 +159,41 @@ function arrivalCard(a){
  return `<div class="alist"><h3>${esc(AN[a.k]||'Buja')}</h3><p class="cnt">Arrivati qui: ${n} ${n===1?'soggetto':'soggetti'}</p><ul>`+
   rows.map(d=>`<li><button type="button" data-id="${d.id}"><b>${esc(d.n)}</b><small>${esc(d.p||NONE)}</small></button></li>`).join('')+'</ul></div>';
 }
-const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-// immagini dei pin: disegnate una volta sola, poi rese dalla GPU
-function pinImg(n,on){
- const name=(on?'pinon-':'pin-')+n;if(map.hasImage(name))return;
- const d=dia(n),r=Math.min(2,Math.max(1,window.devicePixelRatio||1)),c=document.createElement('canvas');
- c.width=c.height=Math.round(d*r);const x=c.getContext('2d');x.scale(r,r);
- x.fillStyle=on?'#a69e70':'#6a5d11';x.beginPath();x.arc(d/2,d/2,d/2,0,Math.PI*2);x.fill();
- if(n>1){x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';x.font=`500 ${d<26?11:d<44?13:15}px 'Instrument Sans',sans-serif`;x.fillText(String(n),d/2,d/2+.5)}
- map.addImage(name,x.getImageData(0,0,c.width,c.height),{pixelRatio:r});
-}
-function ringImg(){
- if(map.hasImage('ring'))return;
- const r=Math.min(2,Math.max(1,window.devicePixelRatio||1)),c=document.createElement('canvas');c.width=c.height=Math.round(16*r);
- const x=c.getContext('2d');x.scale(r,r);x.beginPath();x.arc(8,8,6.5,0,Math.PI*2);x.fillStyle='#fff';x.fill();x.lineWidth=3;x.strokeStyle='#6a5d11';x.stroke();
- map.addImage('ring',x.getImageData(0,0,c.width,c.height),{pixelRatio:r});
-}
 function highlight(d){
  map.setFilter('lines-hi',['==',['get','k'],d&&d.line?d.line:'']);
- map.setFilter('pins-sel',['==',['get','k'],d?key(d.g.pos):'']);
+ groups.forEach(g=>g.el.classList.remove('on'));
  document.querySelectorAll('#list [aria-current],#list [data-sel]').forEach(e=>{e.removeAttribute('aria-current');e.removeAttribute('data-sel')});
  active=d;if(!d)return;
+ d.g.el.classList.add('on');
  d.g.items.forEach(i=>{const b=document.querySelector(`#list button[data-id="${i.id}"]`);if(b)b.setAttribute('data-sel','')});
  const cur=document.querySelector(`#list button[data-id="${d.id}"]`);
  if(cur)cur.setAttribute('aria-current','true');
  const first=document.querySelector('#list [data-sel]');if(first)revealRow(first);
 }
-// la finestra deve vedersi per intero: sposta la mappa con un movimento morbido
-function revealPop(p){
- const el=p.getElement();if(!el)return;
- const r=el.getBoundingClientRect(),m=mapEl.getBoundingClientRect(),pad=14;
- const lf=m.left+pad,tp=m.top+pad,rg=m.right-panel()-pad,bt=m.bottom-pad;
- let x=0,y=0;
- if(r.top<tp)y=r.top-tp;else if(r.bottom>bt)y=r.bottom-bt;
- if(r.left<lf)x=r.left-lf;else if(r.right>rg)x=r.right-rg;
- if(x||y)map.panBy([x,y],{duration:800,easing:ease});
-}
-// riducendo lo zoom la finestra si rimpicciolisce un po' (fino a circa il 60%)
-function scalePop(p){
- const c=p&&p.getElement()&&p.getElement().querySelector('.maplibregl-popup-content');if(!c)return;
- const sc=Math.max(.6,Math.min(1,1-(p._z0-map.getZoom())*.11));
- c.style.transform=sc<1?`scale(${sc})`:'';
-}
 function closePop(){if(curPop){const p=curPop;curPop=null;p.remove()}}
-function openPop(lngLat,html,offset,onClose,onClick,late){
+function openPop(lngLat,html,offset,onClose,onClick){
  closePop();
- const p=new maplibregl.Popup({anchor:'bottom',offset,maxWidth:'330px',focusAfterOpen:false,closeOnClick:false}).setLngLat(lngLat).setHTML(html).addTo(map);
- p._z0=map.getZoom();
+ const p=new maplibregl.Popup({offset,maxWidth:'330px',focusAfterOpen:false,closeOnClick:false}).setLngLat(lngLat).setHTML(html).addTo(map);
  p.on('close',()=>{if(curPop===p)curPop=null;onClose&&onClose()});
- p.getElement().onclick=onClick;curPop=p;
- if(late)setTimeout(()=>{if(curPop===p){p._z0=map.getZoom();scalePop(p);revealPop(p)}},1500);   // dopo il movimento della mappa
- else requestAnimationFrame(()=>requestAnimationFrame(()=>revealPop(p)));
- return p;
+ p.getElement().onclick=onClick;curPop=p;return p;
 }
-function openGroup(g,late){
- fixHeight(g);
+function openGroup(g){
  const off=[g.shift,-dia(g.items.length)/2-4];
  const p=openPop(ll(g.pos),card(g),off,()=>{if(active&&active.g===g)highlight(null)},ev=>{
   const b=ev.target.closest('.nav button');if(!b)return;
   g.cur=(g.cur+Number(b.dataset.s)+g.items.length)%g.items.length;
   p.setHTML(card(g));highlight(g.items[g.cur]);
- },late);
+ });
  highlight(g.items[g.cur]);
 }
 function openArrival(a){
- const o=AOFF[AN[a.k]]||[0,0];
- openPop(ll(a.pos),arrivalCard(a),[o[0],o[1]-12],null,ev=>{const b=ev.target.closest('[data-id]');if(b)select(DATA[+b.dataset.id])});
+ openPop(ll(a.pos),arrivalCard(a),[0,-12],null,ev=>{const b=ev.target.closest('[data-id]');if(b)select(DATA[+b.dataset.id])});
 }
 
 // ricostruisce mappa ed elenco in base ai filtri attivi
+let mk=[];
 function render(){
- closePop();active=null;
+ closePop();mk.forEach(m=>m.remove());mk=[];active=null;
  groups=new Map();lines=new Map();
  vis=DATA.filter(d=>!state.types.size||d.tg.some(t=>state.types.has(t)));
  const arr=new Map(),feats=[];
@@ -254,15 +206,25 @@ function render(){
   if(key(d.a)!==ak&&!lines.has(lk)){lines.set(lk,1);feats.push({type:'Feature',properties:{k:lk},geometry:{type:'LineString',coordinates:arc(d.a,d.b)}})}
   d.line=lines.has(lk)?lk:null;
  });
- curArr=arr;
- const gl=[...groups.values()].sort((a,b)=>b.items.length-a.items.length);   // i più piccoli stanno sopra
- gl.forEach(g=>{const n=g.items.length;g.shift=arr.has(key(g.pos))?Math.round(dia(n)/2+7+5):0;pinImg(n,false);pinImg(n,true)});
- ringImg();
- const pt=(p,props)=>({type:'Feature',properties:props,geometry:{type:'Point',coordinates:ll(p)}});
  map.getSource('lines').setData({type:'FeatureCollection',features:feats});
- map.getSource('pins').setData({type:'FeatureCollection',features:gl.map(g=>pt(g.pos,{k:key(g.pos),n:g.items.length,off:[g.shift,0]}))});
- map.getSource('arrs').setData({type:'FeatureCollection',features:[...arr.values()].map(a=>pt(a.pos,{k:a.k,off:AOFF[AN[a.k]]||[0,0]}))});
- map.setFilter('lines-hi',['==',['get','k'],'']);map.setFilter('pins-sel',['==',['get','k'],'']);
+ map.setFilter('lines-hi',['==',['get','k'],'']);
+ curArr=arr;
+ arr.forEach(a=>{
+  const el=document.createElement('div');el.className='ring';
+  el.onclick=ev=>{ev.stopPropagation();openArrival(a)};
+  mk.push(new maplibregl.Marker({element:el,offset:AOFF[AN[a.k]]||[0,0]}).setLngLat(ll(a.pos)).addTo(map));
+ });
+ groups.forEach(g=>{
+  const n=g.items.length,d=dia(n);
+  g.shift=arr.has(key(g.pos))?Math.round(d/2+7+5):0;   // il pin che coincide con un punto di arrivo si sposta a destra
+  const el=document.createElement('div');el.className='dot';el.style.cssText=`width:${d}px;height:${d}px`;
+  el.title=g.items.map(i=>i.n).slice(0,3).join(', ');
+  if(n>1)el.innerHTML=`<span style="font-size:${d<26?11:d<44?13:15}px">${n}</span>`;
+  el.onclick=ev=>{ev.stopPropagation();openGroup(g)};
+  g.el=el;g.marker=new maplibregl.Marker({element:el,offset:[g.shift,0]}).setLngLat(ll(g.pos)).addTo(map);
+  g.marker.getElement().style.zIndex=String(1000-n);
+  mk.push(g.marker);
+ });
  renderList();
 }
 
@@ -289,9 +251,9 @@ function select(d){
  d.g.cur=d.g.items.indexOf(d);
  closePop();
  const la=[d.a[0],d.b[0]],lo=[d.a[1],d.b[1]];
- map.fitBounds([[Math.min(...lo),Math.min(...la)],[Math.max(...lo),Math.max(...la)]],{padding:{top:70,left:70,bottom:70,right:70+panel()},maxZoom:9,duration:1400,easing:ease});
+ map.fitBounds([[Math.min(...lo),Math.min(...la)],[Math.max(...lo),Math.max(...la)]],{padding:{top:70,left:70,bottom:70,right:70+panel()},maxZoom:9,duration:1100});
  highlight(d);
- openGroup(d.g,true);
+ setTimeout(()=>openGroup(d.g),1150);
 }
 
 // pulsanti tipologia: uno solo alla volta; se nessuno è attivo vale "Tutti"
@@ -314,55 +276,13 @@ handle.onclick=()=>setSide(side.classList.contains('closed'));
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value;renderList()});
 document.querySelector('main').addEventListener('scroll',e=>{e.target.scrollLeft=0;e.target.scrollTop=0});
 if(mobile())setSide(false);
-const SAT=false;
-const BM=['https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg',
- 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default//EPSG3857_500m/{z}/{y}/{x}.jpeg',
- 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'];
-let bmI=0,bmOk=false;
-function addBM(){
- if(bmI>=BM.length)return;
- const id='bm'+bmI;
- map.addSource(id,{type:'raster',tiles:[BM[bmI]],tileSize:256,maxzoom:8,attribution:'Imagery &copy; NASA GIBS'});
- map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':['interpolate',['linear'],['zoom'],5.5,1,8,0],'raster-fade-duration':120}},'lines');
-}
-// se un indirizzo delle immagini non risponde, prova il successivo
-map.on('error',e=>{if(!SAT||bmOk||e.sourceId!=='bm'+bmI)return;const cur=bmI;setTimeout(()=>{if(bmI!==cur||bmOk)return;const id='bm'+bmI;if(map.getLayer(id))map.removeLayer(id);if(map.getSource(id))map.removeSource(id);bmI++;addBM()},0)});
-map.on('data',e=>{if(e.dataType==='source'&&e.tile&&e.sourceId==='bm'+bmI)bmOk=true});
-map.on('styleimagemissing',e=>{const m=/^(pinon|pin)-(\d+)$/.exec(e.id);if(m)pinImg(+m[2],m[1]==='pinon');else if(e.id==='ring')ringImg()});
-// scivolamento con ease-out dopo aver trascinato con il mouse (da touch c'è già): si muove il centro, quindi è fluido anche sul globo
-(function(){
- const el=map.getCanvasContainer();let s=[],down=false;
- el.addEventListener('mousedown',e=>{if(e.button!==0)return;map.stop();down=true;s=[{t:performance.now(),x:e.clientX,y:e.clientY}]});
- window.addEventListener('mousemove',e=>{if(!down)return;const t=performance.now();s.push({t,x:e.clientX,y:e.clientY});while(s.length>2&&t-s[0].t>120)s.shift()});
- window.addEventListener('mouseup',()=>{
-  if(!down)return;down=false;
-  const n=performance.now(),a=s[0],b=s[s.length-1];
-  if(s.length<2||n-b.t>70)return;
-  const dt=Math.max(16,b.t-a.t),vx=(b.x-a.x)/dt,vy=(b.y-a.y)/dt;
-  if(Math.hypot(vx,vy)<.15)return;
-  const T=1300,K=512*Math.pow(2,map.getZoom())/360,c=map.getCenter();
-  let dx=vx*T/3,dy=vy*T/3;const m=Math.hypot(dx,dy);if(m>600){dx*=600/m;dy*=600/m}
-  const lon=c.lng-dx/K,lat=Math.max(-80,Math.min(80,c.lat+dy*Math.cos(c.lat*Math.PI/180)/K));
-  setTimeout(()=>map.easeTo({center:[lon,lat],duration:T,easing:t=>1-Math.pow(1-t,3),essential:true}),0);
- });
-})();
-map.on('zoom',()=>scalePop(curPop));
+map.on('zoom',()=>mapEl.classList.toggle('far',map.getZoom()<9.5));
 map.on('load',()=>{
- const E={type:'FeatureCollection',features:[]};
- map.addSource('lines',{type:'geojson',data:E});map.addSource('pins',{type:'geojson',data:E});map.addSource('arrs',{type:'geojson',data:E});
- const LC=SAT?['interpolate',['linear'],['zoom'],5.5,'#ffffff',7.5,'#6a5d11']:'#6a5d11';
- map.addLayer({id:'lines',type:'line',source:'lines',paint:{'line-color':LC,'line-width':1.2,'line-opacity':SAT?.5:.4,'line-dasharray':[4,3]}});
- map.addLayer({id:'lines-hi',type:'line',source:'lines',filter:['==',['get','k'],''],paint:{'line-color':LC,'line-width':2.6,'line-opacity':1,'line-dasharray':[4,3]}});
- if(SAT)addBM();
- const lay={'icon-allow-overlap':true,'icon-ignore-placement':true,'icon-offset':['get','off']};
- map.addLayer({id:'arrs',type:'symbol',source:'arrs',minzoom:9.5,layout:{...lay,'icon-image':'ring'}});
- map.addLayer({id:'pins',type:'symbol',source:'pins',layout:{...lay,'symbol-z-order':'source','icon-image':['concat','pin-',['to-string',['get','n']]]}});
- map.addLayer({id:'pins-sel',type:'symbol',source:'pins',filter:['==',['get','k'],''],layout:{...lay,'icon-image':['concat','pinon-',['to-string',['get','n']]]}});
- map.on('click','pins',e=>{const f=e.features&&e.features[0];const g=f&&groups.get(f.properties.k);if(g)openGroup(g)});
- map.on('click','arrs',e=>{const f=e.features&&e.features[0];const a=f&&curArr.get(f.properties.k);if(a)openArrival(a)});
- ['pins','arrs'].forEach(l=>{map.on('mouseenter',l,()=>{map.getCanvas().style.cursor='pointer'});map.on('mouseleave',l,()=>{map.getCanvas().style.cursor=''})});
- const fontReady=(document.fonts&&document.fonts.load)?Promise.race([document.fonts.load("500 13px 'Instrument Sans'"),new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
- fontReady.then(()=>{drawFilters();render()});
+ map.addSource('lines',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+ map.addLayer({id:'lines',type:'line',source:'lines',paint:{'line-color':'#6a5d11','line-width':1.2,'line-opacity':.35,'line-dasharray':[4,3]}});
+ map.addLayer({id:'lines-hi',type:'line',source:'lines',filter:['==',['get','k'],''],paint:{'line-color':'#6a5d11','line-width':2.4,'line-opacity':1,'line-dasharray':[4,3]}});
+ mapEl.classList.add('far');
+ drawFilters();render();
 });
 </script>
 </body>
